@@ -131,5 +131,20 @@ router.post('/select-championship-answer', function (req, res) {
     }
 })
 
+// Make sure one of the years has been selected
+router.post('/select-championship-year-answer', function (req, res) {
+    var year = req.session.data['championship-year']
+
+    req.session.data['errors'] = {}
+    if (!year) {                                    // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/select-championship-year')
+    } else {                                        // carry on
+        res.redirect('/select-championship-position')
+    }
+})
+
 
 module.exports = router

@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Select the year in which you competed" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <!--
+      <p>
+        Championship results from <strong>only the past three years</strong> can be used to support your
+        application for an FIA Super Licence.
+      </p>
+      -->
+
+      <form class="form" action="/select-championship-year-answer" method="post">        
+        <!--
+          The rules actually state that you can't submit overlapping championships, so we
+          really need the start and end dates of each championship, not just their year.
+          There's also the complication that some series (like Formula E) straddle two
+          years e.g. start in 2024 and conclude in 2025. So asking the user to select a
+          single year could be a little confusing.
+        -->
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "championship-year",
+          name: "championship-year",
+          value: data['championship-year'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: "Championship: " + data['championship']
+            }
+          },
+          items: [
+            {
+              value: "2025",
+              text: "2025"
+            },
+            {
+              value: "2024",
+              text: "2024"
+            },
+            {
+              value: "2023",
+              text: "2023"
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
