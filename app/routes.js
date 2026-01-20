@@ -3,6 +3,23 @@ const express = require('express')
 
 const router = express.Router()
 
+// Utility functions
+function calculateAgeOnDate(birthDateText, futureDateText) {
+    const birthDate = new Date(birthDateText) // e.g., '1990-05-15'
+    const futureDate = new Date(futureDateText) // e.g., '2026-01-01'
+
+    let age = futureDate.getFullYear() - birthDate.getFullYear()
+    const monthDifference = futureDate.getMonth() - birthDate.getMonth()
+
+    // If the birthday hasn't happened yet in the future year, subtract 1
+    if (monthDifference < 0 || (monthDifference === 0 && futureDate.getDate() < birthDate.getDate())) {
+        age--
+    }
+
+    return age
+}
+
+
 // Add your routes here - above the module.exports line
 
 // Check that one of the application types was selected and redirect accordingly
@@ -36,6 +53,66 @@ router.post('/grade-a-check-answer', function (req, res) {
             'not-answered': true
         }
         res.redirect('/grade-a-check')
+    }
+})
+
+// Check that the driver is old enough to compete in F1 this year and redirect accordingly
+router.post('/age-check-answer', function (req, res) {
+    const day = req.session.data['dob']['day']
+    const month = req.session.data['dob']['month']
+    const year = req.session.data['dob']['year']
+    const dateOfBirth = new Date(year + '-' + String(month).padStart(2, "0") + '-' + String(day).padStart(2, "0"))
+
+    if (!(day && month && year)) {
+        req.session.data['errors'] = {              // not answered all parts, so show an error
+            'missing-day': !day,
+            'missing-month': !month,
+            'missing-year': !year
+        }
+        res.redirect('/age-check')
+    } else if (isNaN(dateOfBirth)) {
+        req.session.data['errors'] = {              // not entered a real date, so show an error
+            'invalid-date': true
+        }
+        res.redirect('/age-check')
+    } else if (dateOfBirth.getTime() > Date.now()) {
+        req.session.data['errors'] = {              // entered a real date but in the future, so show an error
+            'future-date': true
+        }
+        res.redirect('/age-check')
+    } else {
+        req.session.data['errors'] = {}             // input's all good, so apply FIA rules
+
+        // TODO: how does the FIA work for mid-season applications? Does this logic just need to include
+        // all race dates for the current/coming season and then say when the driver would be able to
+        // start their first race?
+        const firstRaceOfSeason = '2026-03-08';
+        var age = calculateAgeOnDate(dateOfBirth, firstRaceOfSeason)
+
+        if (age >= 18) {
+            res.redirect('/super-licence-points')
+        } else if (age == 17) {
+            res.redirect('/age-exemption')
+        } else {
+            res.redirect('/ineligible-age')
+        }
+    }
+})
+
+// Process the 17 year old driver's request for an age exemption
+router.post('/age-exemption-answer', function (req, res) {
+    var requestedExemption = req.session.data['age-exemption']
+
+    req.session.data['errors'] = {}
+    if (requestedExemption == "yes") {          // requesting exemption; must explain next steps at end of transaction flow
+        res.redirect('/super-licence-points')
+    } else if (requestedExemption == "no") {    // not requesting exemption, so no point proceeding
+        res.redirect('/ineligible-age')
+    } else {                                    // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/age-exemption')
     }
 })
 

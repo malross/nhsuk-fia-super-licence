@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Do you want to apply for an age exemption?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form class="form" action="/age-exemption-answer" method="post">
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "age-exemption",
+          name: "age-exemption",
+          value: data['age-exemption'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "In exceptional circumstances, a licence may still be granted at the age of 17, at the discretion of the FIA."
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

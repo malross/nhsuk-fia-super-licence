@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Enter your date of birth" %}
+
+{# Work out what error message (if any) we need to show for the date input #}
+{% set dateError, errorField = null %}
+
+{% if data['errors']['missing-day'] and data['errors']['missing-month'] and data['errors']['missing-year'] %}
+  {% set dateError = { text: "Enter your date of birth" } %}
+  {% set errorField = 'all' %}
+{% elif data['errors']['missing-day'] %}
+  {% set dateError = { text: "Your date of birth must include a day" } %}
+  {% set errorField = 'day' %}
+{% elif data['errors']['missing-month'] %}
+  {% set dateError = { text: "Your date of birth must include a month" } %}
+  {% set errorField = 'month' %}
+{% elif data['errors']['missing-year'] %}
+  {% set dateError = { text: "Your date of birth must include a year" } %}
+  {% set errorField = 'year' %}
+{% elif data['errors']['future-date'] %}
+  {% set dateError = { text: "Your date of birth must be in the past" } %}
+  {% set errorField = 'all' %}
+{% elif data['errors']['invalid-date'] %}
+  {% set dateError = { text: "Your date of birth must be a real date" } %}
+  {% set errorField = 'all' %}
+{% endif %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Add your content here -->
+      <form class="form" action="/age-check-answer" method="post">
+
+        {% from "date-input/macro.njk" import dateInput %}
+
+        <!-- TODO: follow the guidelines at https://design-system.service.gov.uk/components/date-input/#error-messages -->
+        {{ dateInput({
+          id: "date-of-birth",
+          namePrefix: "dob",
+          values: {
+            day: data['dob']['day'],
+            month: data['dob']['month'],
+            year: data['dob']['year']
+          },
+          errorMessage: dateError,
+          fieldset: {
+            legend: {
+              text: "What is your date of birth?",
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "For example, 25 8 2006"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2" + (" nhsuk-input--error" if errorField == 'day' or errorField == 'all' else ""),
+              autocomplete: "bday-day"
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2" + (" nhsuk-input--error" if errorField == 'month' or errorField == 'all' else ""),
+              autocomplete: "bday-month"
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4" + (" nhsuk-input--error" if errorField == 'year' or errorField == 'all' else ""),
+              autocomplete: "bday-year"
+            }
+          ]
+        }) }}
+
+        {% from "details/macro.njk" import details %}
+
+        {% call details({
+          summaryText: "Why is my date of birth needed?"
+        }) %}
+          <p>To qualify for an FIA Super Licence, you must be 18 years old or more on the date of your first Formula 1 race.</p>
+        {% endcall %}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

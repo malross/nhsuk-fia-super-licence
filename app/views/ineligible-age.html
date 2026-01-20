@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Ineligible" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <p>
+        To qualify for an FIA Super Licence, you must be at least 18 years old on the day of your first
+        Formula 1 race.
+      </p>
+
+      <p>
+        Read more <a href="/fia-super-licence-requirements">about this topic</a>.
+      </p>
+
+    </div>
+  </div>
+{% endblock %}
