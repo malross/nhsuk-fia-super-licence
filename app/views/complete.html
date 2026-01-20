@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Application complete" %}
+
+{# No back button here #}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+
+      {% from "panel/macro.njk" import panel %}
+
+      {{ panel({
+        titleText: "Application complete",
+        text: "We have sent you a confirmation email"
+      }) }}
+
+      <h2>What happens next?</h2>
+      
+      <!-- TODO: If there was an age exemption requested, the process will be longer, so we need
+           to say that here -->
+      <p>
+        The FIA will consider your application for an FIA Super Licence and will respond within 2 working days.
+        If successful, an invoice will be sent to your email address.
+      </p>
+      <p>
+        If further evidence is needed to support your case, you
+        may be requested to attend a hearing at the FIA headquarters in Paris, France.
+      </p>
+
+      <p>
+        <a href="#">Tell us about your experience using this service</a>.
+      </p>
+
+    </div>
+  </div>
+{% endblock %}
