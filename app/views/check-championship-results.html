@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Check your championship results" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      {% from "summary-list/macro.njk" import summaryList %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "IndyCar Series, 2025"
+            },
+            value: {
+              text: "Position: 7<br>Points: 4"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: " IndyCar Series, 2025"
+                },
+                {
+                  href: "#",
+                  text: "Remove",
+                  visuallyHiddenText: " IndyCar Series, 2025"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "IndyCar Series, 2024"
+            },
+            value: {
+              text: "Position: 2<br>Points: 30"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: " IndyCar Series, 2024"
+                },
+                {
+                  href: "#",
+                  text: "Remove",
+                  visuallyHiddenText: " IndyCar Series, 2024"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "IndyCar Series, 2023"
+            },
+            value: {
+              text: "Position: 10<br>Points: 1"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: " IndyCar Series, 2023"
+                },
+                {
+                  href: "#",
+                  text: "Remove",
+                  visuallyHiddenText: " IndyCar Series, 2023"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}      
+
+      <form class="form" action="/check-championship-results-answer" method="post">
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "add-another",
+          name: "add-another",
+          value: data['add-another'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: "Do you want to add another championship result?"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -161,5 +161,22 @@ router.post('/select-championship-position-answer', function (req, res) {
     }
 })
 
+// Loop back if the driver needs to add another championship result
+router.post('/check-championship-results-answer', function (req, res) {
+    var addAnother = req.session.data['add-another']
+
+    req.session.data['errors'] = {}
+    if (addAnother == "yes") {          // more to add
+        res.redirect('/select-championship')
+    } else if (addAnother == "no") {    // not requesting exemption, so no point proceeding
+        res.redirect('/free-practice')
+    } else {                                    // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/check-championship-results')
+    }
+})
+
 
 module.exports = router
