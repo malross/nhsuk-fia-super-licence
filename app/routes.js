@@ -178,5 +178,28 @@ router.post('/check-championship-results-answer', function (req, res) {
     }
 })
 
+// Check the driver's entered something sensible for their FP1 session count
+router.post('/free-practice-answer', function (req, res) {
+    var sessionCount = req.session.data['free-practice-sessions']
+
+    // TODO: learn JavaScript so I can do some more sensible value checking here. Falsyness is catching me out.
+    req.session.data['errors'] = {}
+    if (sessionCount == 0) {                // done no free practice, so no points /shrug
+        res.redirect('/complete')
+    } else if (!sessionCount) {             // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/free-practice')
+    } else if (sessionCount >= 1) {         // done free practice, so up to 10 pts max (as of Jan 2026)
+        res.redirect('/complete')
+    } else {                                // entered a weird value, so show error message
+        req.session.data['errors'] = {
+            'invalid-value': true
+        }
+        res.redirect('/free-practice')
+    }
+})
+
 
 module.exports = router
