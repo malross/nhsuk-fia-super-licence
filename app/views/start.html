@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+      <h1>
+        {{ serviceName }}
+      </h1>
+
+      <p>
+        Use this service to apply for or renew your FIA Super Licence.
+      </p>
+
+      {% from "details/macro.njk" import details %}
+
+      {% call details({
+        summaryText: "Why do I need an FIA Super Licence?"
+      }) %}
+        <p>To compete as a driver in Formula 1, you must have a valid and current FIA Super Licence.</p>
+      {% endcall %}
+
+      <h2>Before you start</h2>
+
+      <p>
+        If you have not previously competed in Formula 1, you will need to have the following to hand:
+      </p>
+
+      <ul>
+        <li>Details of your racing history from the past 3 years</li>
+        <li>Details of any Formula 1 free practice sessions you've completed</li>
+      </ul>
+
+      <h2>Apply online</h2>
+
+      <a href="/apply-or-renew" class="nhsuk-button">Start now</a>
+
+      <h2>Other ways to apply</h2>
+
+      <p>
+        You may be able to apply in person. Please contact the FIA President for further details.
+      </p>
+
+    </div>
+  </div>
+{% endblock %}
