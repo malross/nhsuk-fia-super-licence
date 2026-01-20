@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "When did you last race in Formula 1?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "#",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+      <form class="form" action="/most-recent-f1-season-answer" method="post">
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "most-recent-season",
+          name: "most-recent-season",
+          value: data["most-recent-season"],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "2025",
+              text: "2025"
+            },
+            {
+              value: "2024",
+              text: "2024"
+            },
+            {
+              value: "2023",
+              text: "2023"
+            },
+            {
+              value: "earlier",
+              text: "Before 2023"
+            }
+          ]
+        }) }}
+        
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

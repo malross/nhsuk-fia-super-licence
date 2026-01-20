@@ -22,6 +22,23 @@ function calculateAgeOnDate(birthDateText, futureDateText) {
 
 // Add your routes here - above the module.exports line
 
+// Redirect based on most recent season of F1, for renewal
+router.post('/most-recent-f1-season-answer', function (req, res) {
+    var answer = req.session.data['most-recent-season']
+
+    req.session.data['errors'] = {}
+    if (answer == "2025" || answer == "2024" || answer == "2023") {         // fine to renew; just need to pay
+        res.redirect('/complete')
+    } else if (answer == "earlier") {                                       // returning legend?
+        res.redirect('/returning-driver')
+    } else {                                                                // not answered, so show an error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/most-recent-f1-season')
+    }
+})
+
 // Check that one of the application types was selected and redirect accordingly
 router.post('/apply-or-renew-answer', function (req, res) {
     var applicationType = req.session.data['apply-or-renew']
