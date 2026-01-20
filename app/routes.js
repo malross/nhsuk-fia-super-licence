@@ -116,5 +116,20 @@ router.post('/age-exemption-answer', function (req, res) {
     }
 })
 
+// Make sure one of the championships has been selected
+router.post('/select-championship-answer', function (req, res) {
+    var championship = req.session.data['championship']
+
+    req.session.data['errors'] = {}
+    if (!championship) {                        // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/select-championship')
+    } else {                                    // carry on
+        res.redirect('/select-championship-year')
+    }
+})
+
 
 module.exports = router

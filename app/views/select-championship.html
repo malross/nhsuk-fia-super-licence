@@ -1,0 +1,222 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Select a championship in which you've competed" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <p>
+        Points are awarded according to your overall finishing position, with the points
+        available varying by championship.
+      </p>
+
+      {% from "details/macro.njk" import details %}
+
+      {% call details({
+        summaryText: "What are the eligibility criteria?"
+      }) %}
+        <p>
+          For your participation to be eligible for Super Licence points, you must have competed in
+          the championship in at least one of the past 3 years.
+        </p>
+      {% endcall %}
+
+      <form class="form" action="/select-championship-answer" method="post">
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "championship",
+          name: "championship",
+          value: data['championship'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: "Select the championship series",
+              isPageHeading: false,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "FIA Formula 2",
+              text: "FIA Formula 2",
+              hint: {
+                text: "Up to 40 FIA Super Licence points"
+              }
+            },
+            {
+              value: "FIA Formula 3",
+              text: "FIA Formula 3",
+              hint: {
+                text: "Up to 30 FIA Super Licence points"
+              }
+            },
+            {
+              value: "National FIA Formula 4",
+              text: "National FIA Formula 4",
+              hint: {
+                text: "Up to 12 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Formula E",
+              text: "Formula E",
+              hint: {
+                text: "Up to 30 FIA Super Licence points"
+              }
+            },
+            {
+              value: "FIA WEC (Hypercar)",
+              text: "FIA WEC (Hypercar)",
+              hint: {
+                text: "Up to 30 FIA Super Licence points"
+              }
+            },
+            {
+              value: "IndyCar Series",
+              text: "IndyCar Series",
+              hint: {
+                text: "Up to 40 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Indy NXT",
+              text: "Indy NXT",
+              hint: {
+                text: "Up to 15 FIA Super Licence points"
+              }
+            },
+            {
+              value: "F1 Academy",
+              text: "F1 Academy",
+              hint: {
+                text: "Up to 10 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Japanese Super Formula",
+              text: "Japanese Super Formula",
+              hint: {
+                text: "Up to 30 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Formula Regional: Europe (FRECA)",
+              text: "Formula Regional: Europe (FRECA)",
+              hint: {
+                text: "Up to 25 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Formula Regional: Americas",
+              text: "Formula Regional: Americas",
+              hint: {
+                text: "Up to 18 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Formula Regional: Middle East",
+              text: "Formula Regional: Middle East",
+              hint: {
+                text: "Up to 18 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Formula Regional: Oceania",
+              text: "Formula Regional: Oceania",
+              hint: {
+                text: "Up to 18 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Super GT (GT500)",
+              text: "Super GT (GT500)",
+              hint: {
+                text: "Up to 20 FIA Super Licence points"
+              }
+            },
+            {
+              value: "IMSA (GTP)",
+              text: "IMSA (GTP)",
+              hint: {
+                text: "Up to 20 FIA Super Licence points"
+              }
+            },
+            {
+              value: "NASCAR Cup",
+              text: "NASCAR Cup",
+              hint: {
+                text: "Up to 15 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Supercars",
+              text: "Supercars",
+              hint: {
+                text: "Up to 15 FIA Super Licence points"
+              }
+            },
+            {
+              value: "DTM / GT3 Series",
+              text: "DTM / GT3 Series",
+              hint: {
+                text: "Up to 6 FIA Super Licence points"
+              }
+            },
+            {
+              value: "World Karting Championship (Senior)",
+              text: "World Karting Championship (Senior)",
+              hint: {
+                text: "Up to 4 FIA Super Licence points"
+              }
+            },
+            {
+              value: "World Karting Championship (Junior)",
+              text: "World Karting Championship (Junior)",
+              hint: {
+                text: "Up to 3 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Continental Karting Championship (Senior)",
+              text: "Continental Karting Championship (Senior)",
+              hint: {
+                text: "Up to 3 FIA Super Licence points"
+              }
+            },
+            {
+              value: "Continental Karting Championship (Junior)",
+              text: "Continental Karting Championship (Junior)",
+              hint: {
+                text: "Up to 2 FIA Super Licence points"
+              }
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
