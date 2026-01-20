@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "What was your finishing position?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+      
+      <form class="form" action="/select-championship-position-answer" method="post">        
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "championship-position",
+          name: "championship-position",
+          value: data['championship-position'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: "Championship: " + data['championship'] + ", " + data['championship-year']
+            }
+          },
+          items: [
+            {
+              value: "first",
+              text: "1",
+              hint: {
+                text: "Earns 40 points"
+              }
+            },
+            {
+              value: "second",
+              text: "2",
+              hint: {
+                text: "Earns 30 points"
+              }
+            },
+            {
+              value: "third",
+              text: "3",
+              hint: {
+                text: "Earns 20 points"
+              }
+            },
+            {
+              value: "fourth",
+              text: "4",
+              hint: {
+                text: "Earns 10 points"
+              }
+            },
+            {
+              value: "fifth",
+              text: "5",
+              hint: {
+                text: "Earns 8 points"
+              }
+            },
+            {
+              value: "sixth",
+              text: "6",
+              hint: {
+                text: "Earns 6 points"
+              }
+            },
+            {
+              value: "seventh",
+              text: "7",
+              hint: {
+                text: "Earns 4 points"
+              }
+            },
+            {
+              value: "eighth",
+              text: "8",
+              hint: {
+                text: "Earns 3 points"
+              }
+            },
+            {
+              value: "ninth",
+              text: "9",
+              hint: {
+                text: "Earns 2 points"
+              }
+            },
+            {
+              value: "tenth",
+              text: "10",
+              hint: {
+                text: "Earns 1 point"
+              }
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -146,5 +146,20 @@ router.post('/select-championship-year-answer', function (req, res) {
     }
 })
 
+// Make sure one of the points-scoring positions has been selected
+router.post('/select-championship-position-answer', function (req, res) {
+    var position = req.session.data['championship-position']
+
+    req.session.data['errors'] = {}
+    if (!position) {                                // not answered the question, so show error message
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/select-championship-position')
+    } else {                                        // carry on
+        res.redirect('/check-championship-results')
+    }
+})
+
 
 module.exports = router
