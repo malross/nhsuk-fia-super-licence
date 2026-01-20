@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Choose the type of application to make" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Add your content here -->
+      <form class="form" action="/apply-or-renew-answer" method="post">
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "apply-or-renew",
+          name: "apply-or-renew",
+          value: data['apply-or-renew'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "renew",
+              text: "Renew an existing licence",
+              hint: {
+                text: "Use this option if you have held an FIA Super Licence in the past 3 years"
+              }
+            },
+            {
+              value: "apply",
+              text: "Apply for a new licence",
+              hint: {
+                text: "Use this option if you have never held an FIA Super Licence, or if your previous licence expired more than 3 years ago"
+              }
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
