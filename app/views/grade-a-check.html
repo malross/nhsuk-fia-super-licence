@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Do you have an International Grade A competition licence?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+
+      <form class="form" action="/grade-a-check-answer" method="post">
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "grade-a",
+          name: "grade-a",
+          value: data['grade-a'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

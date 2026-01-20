@@ -21,4 +21,23 @@ router.post('/apply-or-renew-answer', function (req, res) {
         res.redirect('/apply-or-renew')
     }
 })
+
+// Check that the driver has their International Grade A licence and redirect accordingly
+router.post('/grade-a-check-answer', function (req, res) {
+    var gradeALicence = req.session.data['grade-a']
+
+    req.session.data['errors'] = {}
+    if (gradeALicence == "yes") {           // got licence, can continue
+        res.redirect('/age-check')
+    } else if (gradeALicence == "no") {     // not got licence, so ineligible
+        res.redirect('/ineligible-grade-a')
+    } else {                                // not answered, so show error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/grade-a-check')
+    }
+})
+
+
 module.exports = router
