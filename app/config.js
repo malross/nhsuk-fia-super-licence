@@ -2,7 +2,7 @@
 
 module.exports = {
   // Service name
-  serviceName: 'Apply for an F1 super license',
+  serviceName: 'Apply for an FIA Super Licence',
 
   // Port to run nodemon on locally
   port: 2000,
