@@ -59,6 +59,23 @@ router.post('/most-recent-f1-season-answer', function (req, res) {
     }
 })
 
+// Check that a returning driver is eligible
+router.post('/returning-driver-answer', function (req, res) {
+    var recentlyTested = req.session.data['recent-testing']
+
+    req.session.data['errors'] = {}
+    if (recentlyTested == "yes") {              // fine to renew; just need to pay
+        res.redirect('/complete')
+    } else if (recentlyTested == "no") {        // not yet eiligble
+        res.redirect('/ineligible-returning-driver')
+    } else {                                    // not answered, so show an error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/returning-driver')
+    }
+})
+
 ///////////////////////////////////////////////////////////////////////////////
 // NEW LICENCE APPLICATION
 
