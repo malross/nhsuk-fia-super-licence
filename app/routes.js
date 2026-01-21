@@ -22,6 +22,26 @@ function calculateAgeOnDate(birthDateText, futureDateText) {
 
 // Add your routes here - above the module.exports line
 
+// Check that one of the application types was selected and redirect accordingly
+router.post('/apply-or-renew-answer', function (req, res) {
+    var applicationType = req.session.data['apply-or-renew']
+
+    req.session.data['errors'] = {}
+    if (applicationType == "renew") {           // renewing licence
+        res.redirect('/most-recent-f1-season')
+    } else if (applicationType == "apply") {    // applying for a new licence
+        res.redirect('/grade-a-check')
+    } else {                                    // not answered, so show an error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/apply-or-renew')
+    }
+})
+
+///////////////////////////////////////////////////////////////////////////////
+// LICENCE RENEWAL
+
 // Redirect based on most recent season of F1, for renewal
 router.post('/most-recent-f1-season-answer', function (req, res) {
     var answer = req.session.data['most-recent-season']
@@ -39,22 +59,8 @@ router.post('/most-recent-f1-season-answer', function (req, res) {
     }
 })
 
-// Check that one of the application types was selected and redirect accordingly
-router.post('/apply-or-renew-answer', function (req, res) {
-    var applicationType = req.session.data['apply-or-renew']
-
-    req.session.data['errors'] = {}
-    if (applicationType == "renew") {           // renewing licence
-        res.redirect('/most-recent-f1-season')
-    } else if (applicationType == "apply") {    // applying for a new licence
-        res.redirect('/grade-a-check')
-    } else {                                    // not answered, so show an error
-        req.session.data['errors'] = {
-            'not-answered': true
-        }
-        res.redirect('/apply-or-renew')
-    }
-})
+///////////////////////////////////////////////////////////////////////////////
+// NEW LICENCE APPLICATION
 
 // Check that the driver has their International Grade A licence and redirect accordingly
 router.post('/grade-a-check-answer', function (req, res) {
