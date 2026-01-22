@@ -45,7 +45,8 @@ function calculateAgeOnDate(birthDateText, futureDateText) {
 }
 
 
-// Add your routes here - above the module.exports line
+///////////////////////////////////////////////////////////////////////////////
+// BRANCHING FOR RENEW VS APPLY
 
 // Check that one of the application types was selected and redirect accordingly
 router.post('/apply-or-renew-answer', function (req, res) {
@@ -64,6 +65,7 @@ router.post('/apply-or-renew-answer', function (req, res) {
     }
 })
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // LICENCE RENEWAL
 
@@ -72,8 +74,8 @@ router.post('/most-recent-f1-season-answer', function (req, res) {
     var answer = req.session.data['most-recent-season']
 
     req.session.data['errors'] = {}
-    if (answer == "2025" || answer == "2024" || answer == "2023") {         // fine to renew; just need to pay
-        res.redirect('/complete')
+    if (answer == "2025" || answer == "2024" || answer == "2023") {         // has recent experience
+        res.redirect('/recent-driver')
     } else if (answer == "earlier") {                                       // returning legend?
         res.redirect('/returning-driver')
     } else {                                                                // not answered, so show an error
@@ -81,6 +83,23 @@ router.post('/most-recent-f1-season-answer', function (req, res) {
             'not-answered': true
         }
         res.redirect('/most-recent-f1-season')
+    }
+})
+
+// Check that a recent driver is still eligible (they almost certainly are)
+router.post('/recent-driver-answer', function (req, res) {
+    var recentlyTested = req.session.data['recent-testing']
+
+    req.session.data['errors'] = {}
+    if (recentlyTested == "yes") {              // fine to renew; just need to pay
+        res.redirect('/complete')
+    } else if (recentlyTested == "no") {        // not yet eiligble
+        res.redirect('/ineligible-recent-driver')
+    } else {                                    // not answered, so show an error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/recent-driver')
     }
 })
 
@@ -100,6 +119,7 @@ router.post('/returning-driver-answer', function (req, res) {
         res.redirect('/returning-driver')
     }
 })
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // NEW LICENCE APPLICATION

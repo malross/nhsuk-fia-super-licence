@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Ineligible" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!-- Add your content here -->
+
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <p>
+        To renew your FIA Super Licence, you must complete at least 100km of driving in Formula 1
+        free practice sessions.
+      </p>
+
+      <p>
+        Alternatively, you can <a href="/grade-a-check">apply for a new licence</a> if you have
+        accumulated 40 Super Licence points in the past 3 years.
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

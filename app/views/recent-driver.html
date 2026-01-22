@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Have you recently completed 100km in F1 free practice?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form class="form" action="/recent-driver-answer" method="post">
+
+        {% from "radios/macro.njk" import radios %}
+
+        {{ radios({
+          idPrefix: "recent-testing",
+          name: "recent-testing",
+          value: data['recent-testing'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          hint: {
+            text: "The 100km distance can have been driven at any time in the past 3 years."
+          },
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
