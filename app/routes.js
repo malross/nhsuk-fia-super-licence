@@ -3,6 +3,31 @@ const express = require('express')
 
 const router = express.Router()
 
+///////////////////////////////////////////////////////////////////////////////
+// Debugging aids (h/t Craig Abbott and Vicky Teinaki RIP)
+
+// Log all session data to the console each time we move page
+router.use((req, res, next) => {
+    const log = {
+        method: req.method,
+        url: req.originalUrl,
+        data: req.session.data
+    }
+    console.log(JSON.stringify(log, null, 2))
+
+    next()
+})
+
+// Log the current and previous URLs
+router.use('/', (req, res, next) => {
+    // NOTE: not sure why Craig needed to use res.locals here
+    res.locals.currentURL = req.originalUrl
+    res.locals.prevURL = req.get('Referrer')
+    console.log('previous page is: ' + res.locals.prevURL + " and current page is " + req.url + " " + res.locals.currentURL)
+    
+    next()
+});
+
 // Utility functions
 function calculateAgeOnDate(birthDateText, futureDateText) {
     const birthDate = new Date(birthDateText) // e.g., '1990-05-15'
