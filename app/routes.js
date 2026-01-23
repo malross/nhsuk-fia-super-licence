@@ -287,7 +287,7 @@ router.post('/free-practice-answer', function (req, res) {
         }
         res.redirect('/free-practice')
     } else {                                // valid value, even if it's over the max counted
-        res.redirect('/complete')
+        res.redirect('/check-total-points')
     }
 })
 

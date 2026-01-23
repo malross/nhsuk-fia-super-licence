@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "You have earned 40 Super Licence points" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <p>
+        Check the summary of how your points were earned before submitting your application.
+      </p>
+
+      {% from "summary-list/macro.njk" import summaryList %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Championship results"
+            },
+            value: {
+              html: "Championships: 3<br>Points: 34"
+            },
+            actions: {
+              items: [
+                {
+                  href: "/check-championship-results",
+                  text: "Change",
+                  visuallyHiddenText: " championship results"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Penalty-free championships"
+            },
+            value: {
+              html: "Championships: 1<br>Points: 2"
+            },
+            actions: {
+              items: [
+                {
+                  href: "/check-championship-results",
+                  text: "Change",
+                  visuallyHiddenText: " penalty-free championships"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Free practice sessions"
+            },
+            value: {
+              html: "Sessions: 4<br>Points: 4"
+            },
+            actions: {
+              items: [
+                {
+                  href: "/free-practice",
+                  text: "Change",
+                  visuallyHiddenText: " free practice sessions"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      <a href="/complete" class="nhsuk-button">Submit application</a>
+
+    </div>
+  </div>
+{% endblock %}
