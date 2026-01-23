@@ -4,6 +4,17 @@
 
 {% set pageName = "Enter your F1 free practice experience" %}
 
+{# Work out what error message (if any) we need to show for the date input #}
+{% set validationMessage = null %}
+
+{% if data['errors']['not-answered'] %}
+  {% set validationMessage = { text: "Enter the number of eligible free practice sessions" } %}
+{% elif data['errors']['not-a-number'] %}
+  {% set validationMessage = { text: "Eligible free practice sessions must be a number, like 2" } %}
+{% elif data['errors']['negative-value-answer'] %}
+  {% set validationMessage = { text: "Enter a value of zero or more" } %}
+{% endif %}
+
 {% block beforeContent %}
   {{ backLink({
     href: "javascript:window.history.back()",
@@ -19,22 +30,36 @@
         {{ pageName }}
       </h1>
 
-      <form class="form" action="/free-practice-answer" method="post">
+      <p>
+        Taking part in Formula 1 free practice sessions earns 1 Super Licence point per session
+        when both of these conditions are met:
+      </p>
+      
+      <ol>
+        <li>
+          The session took place in the past 3 years
+        </li>
+        <li>
+          You drove at least 100km in the session
+        </li>
+      </ol>
 
-        <p>
-          In the past 3 years, how many Formula 1 free practice sessions have you completed, driving
-          at least 100km in each session?
-        </p>
+      <form class="form" action="/free-practice-answer" method="post">
 
         {% from "input/macro.njk" import input %}        
 
         {# TODO: prepare error messages for not-answered and invalid-value #}
         {{ input({
           label: {
-            text: "Number of sessions completed"
+            text: "Eligible free practice sessions"
           },
           id: "free-practice-sessions",
           name: "free-practice-sessions",
+          value: data["free-practice-sessions"],
+          hint: {
+            text: "A maximum of 10 eligible sessions will be counted"
+          },
+          errorMessage: validationMessage,
           classes: "nhsuk-input--width-10"
         }) }}
 
