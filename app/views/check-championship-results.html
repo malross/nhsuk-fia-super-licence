@@ -2,6 +2,34 @@
 
 {% set mainClasses = "nhsuk-main-wrapper--s" %}
 
+{# Build the rows for the summary list #}
+{% set championshipResultRows = [] %}
+
+{% for championshipResult in data['championship-result-list'] %}
+  {% set championshipResultRows = (championshipResultRows.push({
+    key: {
+      text: championshipResult.championship + ", " + championshipResult.year
+    },
+    value: {
+      html: "Position: " + championshipResult.position | rank + "<br>Points: " + championshipResult.points
+    },
+    actions: {
+      items: [
+        {
+          href: "/change-championship-result?index=" + loop.index0,
+          text: "Change",
+          visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+        },
+        {
+          href: "/remove-championship-result?index=" + loop.index0,
+          text: "Remove",
+          visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+        }
+      ]
+    }
+  }), championshipResultRows) %}
+{% endfor %}
+
 {% set pageName = "Check your championship results" %}
 
 {% block beforeContent %}
@@ -18,79 +46,12 @@
         {{ pageName }}
       </h1>
 
+      {# Show the summary list and its action links #}
       {% from "summary-list/macro.njk" import summaryList %}
 
-      {{ summaryList({
-        rows: [
-          {
-            key: {
-              text: "IndyCar Series, 2025"
-            },
-            value: {
-              html: "Position: 7<br>Points: 4"
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: " IndyCar Series, 2025"
-                },
-                {
-                  href: "#",
-                  text: "Remove",
-                  visuallyHiddenText: " IndyCar Series, 2025"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "IndyCar Series, 2024"
-            },
-            value: {
-              html: "Position: 2<br>Points: 30"
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: " IndyCar Series, 2024"
-                },
-                {
-                  href: "#",
-                  text: "Remove",
-                  visuallyHiddenText: " IndyCar Series, 2024"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "IndyCar Series, 2023"
-            },
-            value: {
-              html: "Position: 10<br>Points: 1"
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: " IndyCar Series, 2023"
-                },
-                {
-                  href: "#",
-                  text: "Remove",
-                  visuallyHiddenText: " IndyCar Series, 2023"
-                }
-              ]
-            }
-          }
-        ]
-      }) }}      
+      {{ summaryList({ rows: championshipResultRows }) }}      
 
+      {# Offer to add another result #}
       <form class="form" action="/check-championship-results-answer" method="post">
 
         {% from "radios/macro.njk" import radios %}

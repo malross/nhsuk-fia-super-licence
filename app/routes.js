@@ -241,7 +241,22 @@ router.post('/select-championship-position-answer', function (req, res) {
             'not-answered': true
         }
         res.redirect('/select-championship-position')
-    } else {                                        // carry on
+    } else {                                        // add this championship result to the list
+        // Create the list if it doesn't exist yet
+        if (!req.session.data['championship-result-list']) {
+            req.session.data['championship-result-list'] = []
+        }
+
+        // Add this new result to the list
+        const championshipResult = {
+            championship: req.session.data['championship'],
+            year: req.session.data['championship-year'],
+            position: req.session.data['championship-position'],
+            points: "??"   // TODO
+        }
+        req.session.data['championship-result-list'].push(championshipResult)
+
+        // Show a summary of results so far
         res.redirect('/check-championship-results')
     }
 })
@@ -251,9 +266,14 @@ router.post('/check-championship-results-answer', function (req, res) {
     var addAnother = req.session.data['add-another']
 
     req.session.data['errors'] = {}
-    if (addAnother == "yes") {          // more to add
+    if (addAnother == "yes") {                  // user wants to add another result
+        req.session.data['championship'] = ""
+        req.session.data['championship-year'] = ""
+        req.session.data['championship-position'] = ""
+        req.session.data['add-another'] = ""
+
         res.redirect('/select-championship')
-    } else if (addAnother == "no") {    // not requesting exemption, so no point proceeding
+    } else if (addAnother == "no") {            // not requesting exemption, so no point proceeding
         res.redirect('/free-practice')
     } else {                                    // not answered the question, so show error message
         req.session.data['errors'] = {
