@@ -175,7 +175,7 @@ if (!sessionDataDefaultsFileExists) {
 // Local variables
 app.use(locals(config))
 
-// View engine
+// View engine i.e. treat html files as Nunjucks templates
 app.set('view engine', 'html')
 exampleTemplatesApp.set('view engine', 'html')
 
