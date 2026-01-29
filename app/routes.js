@@ -283,6 +283,17 @@ router.post('/check-championship-results-answer', function (req, res) {
     }
 })
 
+// Removing a championship result
+router.get('/confirm-remove-championship-result', function (req, res) {
+  const indexToRemove = req.session.data['index']
+  
+  if (indexToRemove && req.session.data['championship-result-list']) {
+    req.session.data['championship-result-list'].splice(indexToRemove, 1)
+  }
+  
+  res.redirect('/check-championship-results')
+})
+
 // Check the driver's entered something sensible for their FP1 session count
 router.post('/free-practice-answer', function (req, res) {
     var answer = req.session.data['free-practice-sessions']

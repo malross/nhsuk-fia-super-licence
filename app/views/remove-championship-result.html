@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set resultToRemove = data['championship-result-list'][data.index] %}
+{% set pageName = "Are you sure you want to remove this result?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <!-- Show the result we're about to remove -->
+      {% from "summary-list/macro.njk" import summaryList %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Championship"
+            },
+            value: {
+              text: resultToRemove.championship | default("MISSING CHAMPIONSHIP")
+            }
+          },
+          {
+            key: {
+              text: "Year"
+            },
+            value: {
+              text: resultToRemove.year | default("MISSING YEAR")
+            }
+          },
+          {
+            key: {
+              text: "Position"
+            },
+            value: {
+              text: (resultToRemove.position | default("MISSING POSITION")) | rank
+            }
+          },
+          {
+            key: {
+              text: "Points"
+            },
+            value: {
+              text: resultToRemove.points | default("MISSING POINTS")
+            }
+          }
+        ]
+      }) }}
+
+      <form class="form" action="/confirm-remove-championship-result" method="post">
+        <input type="hidden" name="result-index-to-remove" value="{{ data.index }}">
+
+        {% from "button/macro.njk" import button %}
+
+        <div class="nhsuk-button-group">
+          <!-- Arguably, this is overusing the warning style; it's not that serious -->
+          {{ button({
+            text: "Yes, remove this result",
+            classes: "nhsuk-button--warning"
+          }) }}
+
+          <a href="javascript:window.history.back()" class="nhsuk-link">Cancel</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
