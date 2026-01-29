@@ -18,16 +18,6 @@ router.use((req, res, next) => {
     next()
 })
 
-// Log the current and previous URLs
-router.use('/', (req, res, next) => {
-    // NOTE: not sure why Craig needed to use res.locals here
-    res.locals.currentURL = req.originalUrl
-    res.locals.prevURL = req.get('Referrer')
-    console.log('previous page is: ' + res.locals.prevURL + " and current page is " + req.url + " " + res.locals.currentURL)
-    
-    next()
-});
-
 // Utility functions
 function calculateAgeOnDate(birthDateText, futureDateText) {
     const birthDate = new Date(birthDateText) // e.g., '1990-05-15'
