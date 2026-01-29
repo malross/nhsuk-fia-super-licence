@@ -228,7 +228,15 @@ router.post('/select-championship-position-answer', function (req, res) {
             position: req.session.data['championship-position'],
             points: "??"   // TODO
         }
-        req.session.data['championship-result-list'].push(championshipResult)
+
+        const indexToChange = req.session.data['index-to-change']
+        if (!indexToChange) {
+            req.session.data['championship-result-list'].push(championshipResult)
+        } else {
+            req.session.data['championship-result-list'][indexToChange] = championshipResult
+
+            delete req.session.data['index-to-change']
+        }
 
         // Show a summary of results so far
         res.redirect('/check-championship-results')
@@ -257,15 +265,32 @@ router.post('/check-championship-results-answer', function (req, res) {
     }
 })
 
-// Removing a championship result
-router.get('/confirm-remove-championship-result', function (req, res) {
-  const indexToRemove = req.session.data['index']
-  
-  if (indexToRemove && req.session.data['championship-result-list']) {
-    req.session.data['championship-result-list'].splice(indexToRemove, 1)
-  }
-  
-  res.redirect('/check-championship-results')
+// Changing a championship result
+router.get('/change-championship-result', function (req, res) {
+    const { 'index-to-change': indexToChange } = req.session.data
+
+    if (indexToChange && req.session.data['championship-result-list']) {
+        let result = req.session.data['championship-result-list'][indexToChange]
+
+        req.session.data['championship'] = result.championship
+        req.session.data['championship-year'] = result.year
+        req.session.data['championship-position'] = result.position
+    }
+
+    res.redirect('/select-championship')
+})
+
+// Removing a championship result (already confirmed by user)
+router.post('/confirm-remove-championship-result', function (req, res) {
+    const { 'index-to-remove': indexToRemove } = req.session.data
+
+    if (indexToRemove && req.session.data['championship-result-list']) {
+        req.session.data['championship-result-list'].splice(indexToRemove, 1)
+    }
+
+    delete req.session.data['index-to-remove']
+
+    res.redirect('/check-championship-results')
 })
 
 // Check the driver's entered something sensible for their FP1 session count
@@ -274,8 +299,7 @@ router.post('/free-practice-answer', function (req, res) {
     var sessionCount = parseInt(answer)
 
     req.session.data['errors'] = {}
-    if (answer === "")
-    {
+    if (answer === "") {
         req.session.data['errors'] = {
             'not-answered': true
         }

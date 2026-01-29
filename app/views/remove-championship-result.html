@@ -2,7 +2,9 @@
 
 {% set mainClasses = "nhsuk-main-wrapper--s" %}
 
-{% set resultToRemove = data['championship-result-list'][data.index] %}
+<!-- This looks horribly brittle; might want to make it more robust -->
+{% set resultToRemove = data['championship-result-list'][data['index-to-remove']] %}
+
 {% set pageName = "Are you sure you want to remove this result?" %}
 
 {% block beforeContent %}
@@ -61,8 +63,6 @@
       }) }}
 
       <form class="form" action="/confirm-remove-championship-result" method="post">
-        <input type="hidden" name="result-index-to-remove" value="{{ data.index }}">
-
         {% from "button/macro.njk" import button %}
 
         <div class="nhsuk-button-group">
