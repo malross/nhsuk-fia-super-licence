@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Use Colton Herta's data" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    text: "Back",
+    href: returnPage
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <p class="nhsuk-body">
+        This will reset the prototype with data for <a href="https://en.wikipedia.org/wiki/Colton_Herta">Colton Herta</a>,
+        including his recent championship results.
+      </p>
+
+      <p class="nhsuk-body">
+        You will be left at the page where you can review, edit or add to his championship results.
+      </p>
+
+      <form action="/prototype-admin/use-colton-herta-data" method="post">
+        {{ button({
+          text: "Use Colton Herta's data"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
