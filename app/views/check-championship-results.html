@@ -2,10 +2,12 @@
 
 {% set mainClasses = "nhsuk-main-wrapper--s" %}
 
-{# Build the rows for the summary list #}
+{# Build the rows for the summary list and calculate total SL points #}
 {% set championshipResultRows = [] %}
+{% set totalChampionshipPoints = 0 %}
 
 {% for championshipResult in data['championship-result-list'] %}
+  {% set totalChampionshipPoints = totalChampionshipPoints + (championshipResult.points | int) %}
   {% set championshipResultRows = (championshipResultRows.push({
     key: {
       text: championshipResult.championship + ", " + championshipResult.year
@@ -45,6 +47,11 @@
       <h1>
         {{ pageName }}
       </h1>
+
+      <p>
+        You have earned {{ totalChampionshipPoints }} Super Licence
+        {{ "point" if (totalChampionshipPoints == 1) else "points" }} from the championship results entered so far.
+      </p>
 
       {# Show the summary list and its action links #}
       {% from "summary-list/macro.njk" import summaryList %}

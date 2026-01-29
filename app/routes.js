@@ -226,7 +226,7 @@ router.post('/select-championship-position-answer', function (req, res) {
             championship: req.session.data['championship'],
             year: req.session.data['championship-year'],
             position: req.session.data['championship-position'],
-            points: "??"   // TODO
+            points: "0"
         }
 
         const indexToChange = req.session.data['index-to-change']
