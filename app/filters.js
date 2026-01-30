@@ -36,7 +36,7 @@ module.exports = function (env) {
   ------------------------------------------------------------------ */
 
   filters.rank = function(position) {
-    switch (position) {
+    switch (String(position)) {
       case "1":
         return "1st"
       case "2":
@@ -57,6 +57,8 @@ module.exports = function (env) {
         return "9th"
       case "10":
         return "10th"
+      case "11":
+        return "11th"
       default:
         return position;
     }

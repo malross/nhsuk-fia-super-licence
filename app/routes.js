@@ -200,8 +200,30 @@ router.post('/select-championship-year-answer', function (req, res) {
             'not-answered': true
         }
         res.redirect('/select-championship-year')
-    } else {                                        // carry on
+    } else {                                        // move on to asking them about their finishing position
         res.redirect('/select-championship-position')
+    }
+})
+
+// Render the championship finishing position page with the benefit of its available points data
+router.get('/select-championship-position', function (req, res) {
+    var championship = req.session.data['championship']
+
+    const championshipPoints = require('./points.js')
+    var availablePoints = championshipPoints.find(c => c.name === championship)?.points
+    if (!availablePoints) {
+        // For whatever reason, didn't find the championship, so send back to that page.
+        // Really need to do something better than this though, as the chances are we're
+        // just trapping the user in a loop of death.
+        res.redirect('/select-championship')
+    } else {
+        // Inject the available points into the page
+        var positionsAndPoints = availablePoints.map((points, index) =>
+        ({
+            position: index + 1,
+            points: points
+        }))
+        res.render('select-championship-position', { positionsAndPoints })
     }
 })
 
@@ -222,17 +244,22 @@ router.post('/select-championship-position-answer', function (req, res) {
         }
 
         // Add this new result to the list
+        const championship = req.session.data['championship']
+        const year = req.session.data['championship-year']
+        const position = req.session.data['championship-position']
+        const points = require('./points.js').find(c => c.name === championship).points[position - 1]
+
         const championshipResult = {
-            championship: req.session.data['championship'],
-            year: req.session.data['championship-year'],
-            position: req.session.data['championship-position'],
-            points: "0"
+            championship: championship,
+            year: year,
+            position: position,
+            points: points
         }
 
         const indexToChange = req.session.data['index-to-change']
-        if (!indexToChange) {
+        if (!indexToChange) {                   // adding a new result
             req.session.data['championship-result-list'].push(championshipResult)
-        } else {
+        } else {                                // changing an existing result
             req.session.data['championship-result-list'][indexToChange] = championshipResult
 
             delete req.session.data['index-to-change']

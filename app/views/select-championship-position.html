@@ -4,6 +4,22 @@
 
 {% set pageName = "What was your finishing position?" %}
 
+{# Build the set of radio items according the points available for the current championship #}
+{% set radioItems = [] %}
+
+{% for p in positionsAndPoints %}
+  {% set positionText = (p.position | rank) if (p.points > 0) else (p.position | rank + " or worse") %}
+  {% set pointOrPoints = " point" if (p.points === 1) else " points" %}
+
+  {% set radioItems = (radioItems.push({
+    value: p.position,
+    text: positionText,
+    hint: {
+      text: "Earns " + p.points + pointOrPoints
+    }
+  }), radioItems) %}
+{% endfor %}
+
 {% block beforeContent %}
   {{ backLink({
     href: "javascript:window.history.back()",
@@ -33,78 +49,7 @@
               text: "Championship: " + data['championship'] + ", " + data['championship-year']
             }
           },
-          items: [
-            {
-              value: "1",
-              text: "1",
-              hint: {
-                text: "Earns 40 points"
-              }
-            },
-            {
-              value: "2",
-              text: "2",
-              hint: {
-                text: "Earns 30 points"
-              }
-            },
-            {
-              value: "3",
-              text: "3",
-              hint: {
-                text: "Earns 20 points"
-              }
-            },
-            {
-              value: "4",
-              text: "4",
-              hint: {
-                text: "Earns 10 points"
-              }
-            },
-            {
-              value: "5",
-              text: "5",
-              hint: {
-                text: "Earns 8 points"
-              }
-            },
-            {
-              value: "6",
-              text: "6",
-              hint: {
-                text: "Earns 6 points"
-              }
-            },
-            {
-              value: "7",
-              text: "7",
-              hint: {
-                text: "Earns 4 points"
-              }
-            },
-            {
-              value: "8",
-              text: "8",
-              hint: {
-                text: "Earns 3 points"
-              }
-            },
-            {
-              value: "9",
-              text: "9",
-              hint: {
-                text: "Earns 2 points"
-              }
-            },
-            {
-              value: "10",
-              text: "10",
-              hint: {
-                text: "Earns 1 point"
-              }
-            }
-          ]
+          items: radioItems
         }) }}
 
         {% from "button/macro.njk" import button %}

@@ -13,7 +13,7 @@
       text: championshipResult.championship + ", " + championshipResult.year
     },
     value: {
-      html: "Position: " + championshipResult.position | rank + "<br>Points: " + championshipResult.points
+      html: "Position: " + (championshipResult.position | rank) + (" or worse" if (championshipResult.points === 0) else "") + "<br>Points: " + championshipResult.points
     },
     actions: {
       items: [
@@ -49,8 +49,8 @@
       </h1>
 
       <p>
-        You have earned {{ totalChampionshipPoints }} Super Licence
-        {{ "point" if (totalChampionshipPoints == 1) else "points" }} from the championship results entered so far.
+        You have earned <strong>{{ totalChampionshipPoints }} Super Licence
+        {{ "point" if (totalChampionshipPoints == 1) else "points" }}</strong> from the championship results entered so far.
       </p>
 
       {# Show the summary list and its action links #}
