@@ -57,9 +57,13 @@
         In the following pages, provide the racing history you want to use for your application.
       </p>
       
-      <p>
-        <a href="/select-championship" class="nhsuk-button">Continue</a>
-      </p>
+      <form class="form" action="/select-first-championship" method="post">
+        {% from "button/macro.njk" import button %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
     </div>
   </div>
 {% endblock %}

@@ -175,6 +175,13 @@ router.post('/age-exemption-answer', function (req, res) {
     }
 })
 
+// Get ready to enter the first championship result
+router.post('/select-first-championship', function (req, res) {
+    req.session.data['championship-result-action'] = "Add first"  // TODO: use an enum-like value
+
+    res.redirect('/select-championship')
+})
+
 // Make sure one of the championships has been selected
 router.post('/select-championship-answer', function (req, res) {
     var championship = req.session.data['championship']
@@ -279,7 +286,9 @@ router.post('/check-championship-results-answer', function (req, res) {
         req.session.data['championship'] = ""
         req.session.data['championship-year'] = ""
         req.session.data['championship-position'] = ""
-        req.session.data['add-another'] = ""
+        delete req.session.data['add-another']
+
+        req.session.data['championship-result-action'] = "Add another"  // TODO: use an enum-like value
 
         res.redirect('/select-championship')
     } else if (addAnother == "no") {            // not requesting exemption, so no point proceeding
@@ -302,6 +311,10 @@ router.get('/change-championship-result', function (req, res) {
         req.session.data['championship'] = result.championship
         req.session.data['championship-year'] = result.year
         req.session.data['championship-position'] = result.position
+
+        req.session.data['championship-result-action'] = "Change existing"  // TODO: use an enum-like value
+    } else {
+        // TODO: handle the error of lost session data... but how?
     }
 
     res.redirect('/select-championship')

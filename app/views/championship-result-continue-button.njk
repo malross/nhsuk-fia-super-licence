@@ -1,0 +1,11 @@
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue"
+          }) }}
+
+          {% if data['championship-result-action'] == "Add another" %}
+            <a href="/check-championship-results" class="nhsuk-link">Cancel adding this result</a>
+          {% elif data['championship-result-action'] == "Change existing" %}
+            <a href="/check-championship-results" class="nhsuk-link">Cancel changing this result</a>
+          {% endif %}
+        </div>

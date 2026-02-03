@@ -40,6 +40,7 @@
       {% endcall %}
 
       <form class="form" action="/select-championship-answer" method="post">
+        
         {% from "radios/macro.njk" import radios %}
 
         {{ radios({
@@ -214,11 +215,7 @@
           ]
         }) }}
 
-        {% from "button/macro.njk" import button %}
-
-        {{ button({
-          text: "Continue"
-        }) }}
+        {% include "championship-result-continue-button.njk" %}
 
       </form>
 
