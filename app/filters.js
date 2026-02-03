@@ -64,6 +64,10 @@ module.exports = function (env) {
     }
   }
 
+  filters.isKartingChampionship = function(championship) {
+    return (championship.indexOf("Karting") !== -1)
+  }
+
   /* keep the following line to return your filters to the app  */
   return filters
 }

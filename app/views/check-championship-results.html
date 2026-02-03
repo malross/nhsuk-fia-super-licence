@@ -2,34 +2,90 @@
 
 {% set mainClasses = "nhsuk-main-wrapper--s" %}
 
-{# Build the rows for the summary list and calculate total SL points #}
-{% set championshipResultRows = [] %}
-{% set totalChampionshipPoints = 0 %}
+{# We'll have two summary lists: one of eligible results and one of ineligible results #}
+{% set eligibleResultRows = [] %}
+{% set ineligibleResultRows = [] %}
 
+{# Find the karting results and note which is the eligible one #}
+{% set kartingResults = [] %}
+{% set bestKartingResult = 0 %}
+{% set bestKartingResultIndex = -1 %}
+{% for potentialKartingResult in data['championship-result-list'] %}
+  {% if potentialKartingResult.championship | isKartingChampionship %}
+    {% set kartingResults = (kartingResults.push({
+      resultIndex: loop.index0,
+      resultValue: potentialKartingResult.points
+    }), kartingResults) %}
+    {% if (potentialKartingResult.points > bestKartingResult) %}
+      {% set bestKartingResult = potentialKartingResult.points %}
+      {% set bestKartingResultIndex = (kartingResults | length) - 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% set totalEligiblePoints = 0 %}
+
+{# Build the rows for the summary lists and calculate total eligible SL points #}
 {% for championshipResult in data['championship-result-list'] %}
-  {% set totalChampionshipPoints = totalChampionshipPoints + (championshipResult.points | int) %}
-  {% set championshipResultRows = (championshipResultRows.push({
-    key: {
-      text: championshipResult.championship + ", " + championshipResult.year
-    },
-    value: {
-      html: "Position: " + (championshipResult.position | rank) + (" or worse" if (championshipResult.points === 0) else "") + "<br>Points: " + championshipResult.points
-    },
-    actions: {
-      items: [
-        {
-          href: "/change-championship-result?index-to-change=" + loop.index0,
-          text: "Change",
-          visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
-        },
-        {
-          href: "/remove-championship-result?index-to-remove=" + loop.index0,
-          text: "Remove",
-          visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
-        }
-      ]
-    }
-  }), championshipResultRows) %}
+
+  {# Work out eligibility; zero points is automatically ineligible, but be mindful of the karting rule too #}
+  {% set pointsContribution = championshipResult.points %}
+  {% if championshipResult.championship | isKartingChampionship %}
+    {% if loop.index0 != kartingResults[bestKartingResultIndex].resultIndex %}
+      {% set pointsContribution = 0 %}
+    {% endif %}
+  {% endif %}
+
+  {% set totalEligiblePoints = totalEligiblePoints + pointsContribution %}
+
+  {# TODO: refactor to remove the massive duplication of logic here. Can I use a macro? An include? Something else? #}
+  {% if pointsContribution > 0 %}
+    {% set eligibleResultRows = (eligibleResultRows.push({
+      key: {
+        text: championshipResult.championship + ", " + championshipResult.year
+      },
+      value: {
+        html: "Position: " + (championshipResult.position | rank) + (" or worse" if (championshipResult.points === 0) else "") + "<br>Points: " + championshipResult.points
+      },
+      actions: {
+        items: [
+          {
+            href: "/change-championship-result?index-to-change=" + loop.index0,
+            text: "Change",
+            visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+          },
+          {
+            href: "/remove-championship-result?index-to-remove=" + loop.index0,
+            text: "Remove",
+            visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+          }
+        ]
+      }
+    }), eligibleResultRows) %}
+  {% else %}
+    {% set ineligibleResultRows = (ineligibleResultRows.push({
+      key: {
+        text: championshipResult.championship + ", " + championshipResult.year
+      },
+      value: {
+        html: "Position: " + (championshipResult.position | rank) + (" or worse" if (championshipResult.points === 0) else "") + "<br>Points: " + championshipResult.points
+      },
+      actions: {
+        items: [
+          {
+            href: "/change-championship-result?index-to-change=" + loop.index0,
+            text: "Change",
+            visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+          },
+          {
+            href: "/remove-championship-result?index-to-remove=" + loop.index0,
+            text: "Remove",
+            visuallyHiddenText: championshipResult.championship + ", " + championshipResult.year
+          }
+        ]
+      }
+    }), ineligibleResultRows) %}
+  {% endif %}
 {% endfor %}
 
 {% set pageName = "Check your championship results" %}
@@ -49,20 +105,26 @@
       </h1>
 
       <p>
-        You have earned <strong>{{ totalChampionshipPoints }} Super Licence
-        {{ "point" if (totalChampionshipPoints == 1) else "points" }}</strong> from the championship results entered so far.
+        You have earned <strong>{{ totalEligiblePoints }}</strong> of the required 40 Super Licence points
+        from the championship results entered so far.
       </p>
 
-      {# Show the summary list and its action links #}
-      {% from "summary-list/macro.njk" import summaryList %}
+      {% if (eligibleResultRows | length) > 0 %}
+        <h2>Eligible championship results</h2>
 
-      {{ summaryList({ rows: championshipResultRows }) }}      
+        {{ summaryList({ rows: eligibleResultRows }) }}      
+      {% endif %}
+
+      {% if (ineligibleResultRows | length) > 0 %}
+        <h2>Ineligible championship results</h2>
+
+        {{ summaryList({ rows: ineligibleResultRows }) }}      
+      {% endif %}
 
       {# Offer to add another result #}
       <form class="form" action="/check-championship-results-answer" method="post">
 
         {% from "radios/macro.njk" import radios %}
-
         {{ radios({
           idPrefix: "add-another",
           name: "add-another",
@@ -86,8 +148,6 @@
             }
           ]
         }) }}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"
