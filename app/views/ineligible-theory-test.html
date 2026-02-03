@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Ineligible" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1>
+        {{ pageName }}
+      </h1>
+
+      <p>
+        To qualify for an FIA Super Licence, you must have taken and passed the FIA Theory Test, covering
+        the FIA's International Sporting Code and F1 Sporting Regulations.
+      </p>
+
+      <p>
+        Read more <a href="/fia-super-licence-requirements">about this topic</a>.
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

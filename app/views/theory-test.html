@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% set mainClasses = "nhsuk-main-wrapper--s" %}
+
+{% set pageName = "Have you passed the FIA Theory Test?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form class="form" action="/theory-test-answer" method="post">
+
+        {{ radios({
+          idPrefix: "theory-test",
+          name: "theory-test",
+          value: data['theory-test'],
+          errorMessage: {
+            text: "Select one of the options to continue"
+          } if data['errors']['not-answered'] else null,
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

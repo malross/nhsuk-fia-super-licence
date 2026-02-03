@@ -149,7 +149,7 @@ router.post('/age-check-answer', function (req, res) {
         var age = calculateAgeOnDate(dateOfBirth, firstRaceOfSeason)
 
         if (age >= 18) {
-            res.redirect('/super-licence-points')
+            res.redirect('/theory-test')
         } else if (age == 17) {
             res.redirect('/age-exemption')
         } else {
@@ -163,8 +163,8 @@ router.post('/age-exemption-answer', function (req, res) {
     var requestedExemption = req.session.data['age-exemption']
 
     req.session.data['errors'] = {}
-    if (requestedExemption == "yes") {          // requesting exemption; must explain next steps at end of transaction flow
-        res.redirect('/super-licence-points')
+    if (requestedExemption == "yes") {          // requesting exemption
+        res.redirect('/theory-test')
     } else if (requestedExemption == "no") {    // not requesting exemption, so no point proceeding
         res.redirect('/ineligible-age')
     } else {                                    // not answered the question, so show error message
@@ -172,6 +172,23 @@ router.post('/age-exemption-answer', function (req, res) {
             'not-answered': true
         }
         res.redirect('/age-exemption')
+    }
+})
+
+// Check that the driver has passed their theory test
+router.post('/theory-test-answer', function (req, res) {
+    const theoryTestPassed = req.session.data['theory-test']
+
+    req.session.data['errors'] = {}
+    if (theoryTestPassed == "yes") {            // passed test, can continue
+        res.redirect('/super-licence-points')
+    } else if (theoryTestPassed == "no") {      // not passed test, so ineligible
+        res.redirect('/ineligible-theory-test')
+    } else {                                    // not answered, so show error
+        req.session.data['errors'] = {
+            'not-answered': true
+        }
+        res.redirect('/theory-test')
     }
 })
 
