@@ -18,8 +18,6 @@
       <!-- Add your content here -->
       <form class="form" action="/apply-or-renew-answer" method="post">
 
-        {% from "radios/macro.njk" import radios %}
-
         {{ radios({
           idPrefix: "apply-or-renew",
           name: "apply-or-renew",
@@ -51,8 +49,6 @@
             }
           ]
         }) }}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"

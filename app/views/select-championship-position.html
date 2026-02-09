@@ -35,7 +35,6 @@
       </h1>
       
       <form class="form" action="/select-championship-position-answer" method="post">        
-        {% from "radios/macro.njk" import radios %}
 
         {{ radios({
           idPrefix: "championship-position",
@@ -55,7 +54,6 @@
         {% include "championship-result-continue-button.njk" %}
 
       </form>
-
     </div>
   </div>
 {% endblock %}

@@ -18,13 +18,6 @@
         {{ pageName }}
       </h1>
 
-      <!--
-      <p>
-        Championship results from <strong>only the past three years</strong> can be used to support your
-        application for an FIA Super Licence.
-      </p>
-      -->
-
       <form class="form" action="/select-championship-year-answer" method="post">        
         <!--
           The rules actually state that you can't submit overlapping championships, so we
@@ -33,8 +26,6 @@
           years e.g. start in 2024 and conclude in 2025. So asking the user to select a
           single year could be a little confusing.
         -->
-
-        {% from "radios/macro.njk" import radios %}
 
         {{ radios({
           idPrefix: "championship-year",
@@ -67,7 +58,6 @@
         {% include "championship-result-continue-button.njk" %}
 
       </form>
-
     </div>
   </div>
 {% endblock %}

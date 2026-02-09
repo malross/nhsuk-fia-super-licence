@@ -17,8 +17,6 @@
 
       <form class="form" action="/age-exemption-answer" method="post">
 
-        {% from "radios/macro.njk" import radios %}
-
         {{ radios({
           idPrefix: "age-exemption",
           name: "age-exemption",
@@ -47,8 +45,6 @@
             }
           ]
         }) }}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"

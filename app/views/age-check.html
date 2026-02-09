@@ -41,9 +41,6 @@
       <!-- Add your content here -->
       <form class="form" action="/age-check-answer" method="post">
 
-        {% from "date-input/macro.njk" import dateInput %}
-
-        <!-- TODO: follow the guidelines at https://design-system.service.gov.uk/components/date-input/#error-messages -->
         {{ dateInput({
           id: "date-of-birth",
           namePrefix: "dob",
@@ -82,15 +79,11 @@
           ]
         }) }}
 
-        {% from "details/macro.njk" import details %}
-
         {% call details({
           summaryText: "Why is my date of birth needed?"
         }) %}
           <p>To qualify for an FIA Super Licence, you must be 18 years old or more on the date of your first Formula 1 race.</p>
         {% endcall %}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"

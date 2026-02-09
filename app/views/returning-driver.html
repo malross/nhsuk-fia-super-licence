@@ -14,10 +14,7 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <form class="form" action="/returning-driver-answer" method="post">
-
-        {% from "radios/macro.njk" import radios %}
 
         {{ radios({
           idPrefix: "recent-testing",
@@ -47,8 +44,6 @@
             }
           ]
         }) }}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"

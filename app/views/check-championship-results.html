@@ -124,7 +124,6 @@
       {# Offer to add another result #}
       <form class="form" action="/check-championship-results-answer" method="post">
 
-        {% from "radios/macro.njk" import radios %}
         {{ radios({
           idPrefix: "add-another",
           name: "add-another",

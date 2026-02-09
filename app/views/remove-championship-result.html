@@ -23,8 +23,6 @@
       </h1>
 
       <!-- Show the result we're about to remove -->
-      {% from "summary-list/macro.njk" import summaryList %}
-
       {{ summaryList({
         rows: [
           {
@@ -63,7 +61,6 @@
       }) }}
 
       <form class="form" action="/confirm-remove-championship-result" method="post">
-        {% from "button/macro.njk" import button %}
 
         <div class="nhsuk-button-group">
           <!-- Arguably, this is overusing the warning style; it's not that serious -->
@@ -76,7 +73,6 @@
         </div>
 
       </form>
-
     </div>
   </div>
 {% endblock %}

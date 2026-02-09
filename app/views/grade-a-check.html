@@ -14,11 +14,7 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <!-- Add your content here -->
-
       <form class="form" action="/grade-a-check-answer" method="post">
-
-        {% from "radios/macro.njk" import radios %}
 
         {{ radios({
           idPrefix: "grade-a",
@@ -46,14 +42,11 @@
           ]
         }) }}
 
-        {% from "button/macro.njk" import button %}
-
         {{ button({
           text: "Continue"
         }) }}
 
       </form>
-
     </div>
   </div>
 {% endblock %}

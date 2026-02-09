@@ -46,9 +46,6 @@
 
       <form class="form" action="/free-practice-answer" method="post">
 
-        {% from "input/macro.njk" import input %}        
-
-        {# TODO: prepare error messages for not-answered and invalid-value #}
         {{ input({
           label: {
             text: "Eligible free practice sessions"
@@ -62,8 +59,6 @@
           errorMessage: validationMessage,
           classes: "nhsuk-input--width-10"
         }) }}
-
-        {% from "button/macro.njk" import button %}
 
         {{ button({
           text: "Continue"
